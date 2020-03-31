@@ -1,5 +1,5 @@
 {
-    "name": "kavlaoved-server",
+    "name": "pay-check-server",
     "jwtPrivateKey": "",
     "mongodb": {
         "connection-string": ""
