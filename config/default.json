@@ -1,0 +1,7 @@
+{
+    "name": "kavlaoved-server",
+    "jwtPrivateKey": "",
+    "mongodb": {
+        "connection-string": ""
+    }
+}

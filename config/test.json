@@ -1,0 +1,4 @@
+{
+    "name": "Pay-Check Server - Test",
+    "connection-string": "mongodb://localhost/pay-check-server_tests"
+}

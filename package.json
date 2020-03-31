@@ -1,0 +1,37 @@
+{
+  "name": "pay-check-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --watchAll --verbose --coverage",
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": "8.11.4"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.7.3",
+    "config": "^3.0.0",
+    "express": "^4.16.4",
+    "express-async-errors": "^3.1.1",
+    "helmet": "^3.21.2",
+    "hoek": "^6.1.2",
+    "joi": "^14.3.0",
+    "joi-objectid": "^2.0.0",
+    "jsonwebtoken": "^8.4.0",
+    "lodash": "^4.17.15",
+    "log4js": "^3.0.6",
+    "log4js-azure-append-blob-appender": "^1.0.1",
+    "mongoose": "^5.8.9",
+    "tunnel-agent": "^0.6.0"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0",
+    "supertest": "^3.3.0"
+  }
+}
