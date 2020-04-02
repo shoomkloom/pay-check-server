@@ -31,8 +31,6 @@ router.get('/:id', auth, async function (req, res) {
 router.post('/', async function (req, res) {
     logger.debug('POST / - Invoked');
 
-    console.log('req.body: ', req.body);
-
     //Validate requested details
     const result = validateUser(req.body);
     if(result.error){
