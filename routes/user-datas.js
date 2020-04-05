@@ -1,9 +1,9 @@
 const auth = require('../middleware/auth');
 const {UserData, validateUserData} = require('../models/user-data');
+const {encrypt} = require('../models/helpers');
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
-const bcrypt = require('bcryptjs');
 const log4js = require('log4js');
 const logger = log4js.getLogger('users');
 
@@ -32,7 +32,7 @@ router.post('/', async function (req, res) {
     logger.debug('POST / - Invoked');
 
     //Validate requested details
-    const result = validateUser(req.body);
+    const result = validateUserData(req.body);
     if(result.error){
         logger.error(`ERROR - ${result.error}`);
         return res.status(400).send(result.error.message);
@@ -49,8 +49,14 @@ router.post('/', async function (req, res) {
 
     var keys = Object.keys(req.body);
     for(var i = 0, length = keys.length; i < length; i++) {
-        userData[keys[i]] = req.body[keys[i]];
+        if(keys[i] != 'tlushpassword'){
+            userData[keys[i]] = req.body[keys[i]];
+        }
     }
+
+    //Save encrypted tlush password
+    userData.tlushpassword = encrypt(req.body['tlushpassword']);
+
     userData.createdDate = new Date();
     await userData.save();
 
@@ -77,8 +83,16 @@ router.put('/:userid', auth, async function (req, res) {
     //Update requested userData
     var keys = Object.keys(req.body);
     for(var i = 0, length = keys.length; i < length; i++) {
-        userData[keys[i]] = req.body[keys[i]];
+        if(keys[i] != 'tlushpassword'){
+            userData[keys[i]] = req.body[keys[i]];
+        }
     }
+
+    //Save encrypted tlush password if exists
+    if(req.body['tlushpassword']){
+        userData.tlushpassword = encrypt(req.body['tlushpassword']);
+    }
+
     userData.updatedDate = new Date();
     await userData.save();
 

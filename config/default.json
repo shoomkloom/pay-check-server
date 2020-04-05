@@ -3,5 +3,6 @@
     "jwtPrivateKey": "",
     "mongodb": {
         "connection-string": ""
-    }
+    },
+    "cryptopass": ""
 }

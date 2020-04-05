@@ -37,7 +37,7 @@ const userDataSchema = new mongoose.Schema({
         required: true
     },
     vetekformalystart: {
-        type: Date,
+        type: String,
         required: true
     },
     veteknotformaly: {
@@ -80,16 +80,21 @@ const userDataSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    fullyregestered: {
-        type: Boolean,
-        required: true
-    },
+    
     createdDate: {
         type: Date,
         required: true
     },
     updatedDate: {
         type: Date
+    },
+    tlushusercode: {
+        type: String,
+        required: true
+    },
+    tlushpassword: {
+        type: String,
+        required: true
     }
 },{collection: 'userdatas'});
 
@@ -99,15 +104,14 @@ const UserData = mongoose.model('UserData', userDataSchema, 'userdatas');
 function validateUserData(userData){
     const userDataSchema = {
         userid: Joi.string().required(),
-        fullyregestered: Joi.boolean().required(),
         ahuzeimisra: Joi.number().required(),
         hachshara: Joi.string().required(),
         vetekyears: Joi.number().required(),
         teudathoraa: Joi.boolean().required(),
         gmuleihishtalmut: Joi.string().required(),
-        ofekhadash: Joi.string().required(),
+        ofekhadash: Joi.boolean().required(),
         vetekformaly: Joi.number().required(),
-        vetekformalystart: Joi.date().required(),
+        vetekformalystart: Joi.string().required(),
         veteknotformaly: Joi.number().required(),
         vetekzahalpolice: Joi.number().required(),
         sadirmonths: Joi.number().required(),
@@ -117,7 +121,9 @@ function validateUserData(userData){
         policehoraa: Joi.boolean().required(),
         madrichshelach: Joi.boolean().required(),
         vetekprofessional: Joi.number().required(),
-        vetekminhalit: Joi.number().required()
+        vetekminhalit: Joi.number().required(),
+        tlushusercode: Joi.string().required(),
+        tlushpassword: Joi.string().required()
     }
     return Joi.validate(userData, userDataSchema);
 };

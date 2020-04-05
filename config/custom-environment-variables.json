@@ -3,5 +3,6 @@
     "jwtPrivateKey": "pay-check-server_jwtPrivateKey",
     "mongodb": {
         "connection-string": "mongoConnectionString"
-    }
+    },
+    "cryptopass": "pay-check-server_cryptopass"
 }

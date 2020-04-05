@@ -1,5 +1,5 @@
 const auth = require('../middleware/auth');
-const {User, validateUser} = require('../models/user');
+const {User, validateUser, validateUserUpdate} = require('../models/user');
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
@@ -11,21 +11,20 @@ router.get('/', auth, async function (req, res) {
     logger.debug('GET / - Invoked');
     //Get the list of users
     const users = await User.find().sort('name');
-    res.send(_.map(users, _.partialRight(_.pick, ['_id', 'name', 'email'])));
+    res.send(_.map(users, _.partialRight(_.pick, ['_id', 'name', 'email', 'password', 'phone', 'fullyregestered'])));
 });
 
 router.get('/:id', auth, async function (req, res) {
     logger.debug(`GET /${req.params.id} - Invoked`);
     //Find requested user
     const user = await User.findById(req.params.id);
-
     if(!user){
         logger.error(`Could not find a user with id=${req.params.id} - ` + ex);
         return res.status(404).send(`Could not find a user with id=${req.params.id}`);
     }
     
     //Get the requested user
-    res.send(_.pick(user, ['_id', 'name', 'email']));
+    res.send(_.pick(user, ['_id', 'name', 'email', 'password', 'phone', 'fullyregestered']));
 });
 
 router.post('/', async function (req, res) {
@@ -46,6 +45,7 @@ router.post('/', async function (req, res) {
 
     //Create a new user and add to db
     user = new User(_.pick(req.body, ['name', 'email', 'password', 'phone']));
+    user.fullyregestered = false;
     user.createdDate = new Date();
 
     const salt = await bcrypt.genSalt(10);   
@@ -54,7 +54,32 @@ router.post('/', async function (req, res) {
     await user.save();
 
     const token = user.generateAuthToken();
-    res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
+    res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email', 'password', 'phone', 'fullyregestered']));
+});
+
+router.put('/:id', auth, async function (req, res) {
+    logger.debug(`PUT /${req.params.id} - Invoked`);
+
+    //Validate requested details
+    const result = validateUserUpdate(req.body);
+    if(result.error){
+        logger.error(`ERROR - ${result.error.message}`);
+        return res.status(400).send(result.error.message);
+    }
+
+    let user = await User.findById(req.params.id);
+    if(!user){
+        logger.error(`Could not find a user with id=${req.params.id} - ` + ex);
+        return res.status(404).send(`Could not find a user with id=${req.params.id}`);
+    }
+
+    //Update user
+    user.fullyregestered = req.body.fullyregestered;
+    user.updatedDate = new Date();
+    await user.save();
+
+    //Send the updated user data
+    res.send(_.pick(user, ['_id', 'name', 'email', 'password', 'phone', 'fullyregestered']));
 });
 
 module.exports = router;

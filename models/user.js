@@ -36,6 +36,10 @@ const userSchema = new mongoose.Schema({
     imageUrl: {
         type: String
     },
+    fullyregestered: {
+        type: Boolean,
+        required: true
+    },
     createdDate: {
         type: Date,
         required: true
@@ -58,11 +62,25 @@ function validateUser(user){
         name: Joi.string().min(3).max(50).required(),
         email: Joi.string().min(5).max(255).email().required(),
         password: Joi.string().min(5).max(1024).required(),
+        fullyregestered: Joi.boolean().required(),
         phone: Joi.string().min(5).max(20)
+    }
+    return Joi.validate(user, userSchema);
+};
+
+function validateUserUpdate(user){
+    const userSchema = {
+        _id: Joi.string(),
+        name: Joi.string().min(3).max(50),
+        email: Joi.string().min(5).max(255).email(),
+        password: Joi.string().min(5).max(1024),
+        phone: Joi.string().min(5).max(20),
+        fullyregestered: Joi.boolean()
     }
     return Joi.validate(user, userSchema);
 };
 
 exports.User = User;
 exports.validateUser = validateUser;
+exports.validateUserUpdate = validateUserUpdate;
 exports.userSchema = userSchema;
