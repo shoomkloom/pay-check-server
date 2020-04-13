@@ -23,7 +23,7 @@ function encrypt(text) {
 function decrypt(encryptedtext) {
     logger.debug('decrypt - Invoked');
 
-    let textParts = text.split(':');
+    let textParts = encryptedtext.split(':');
     let iv = Buffer.from(textParts.shift(), 'hex');
     let encryptedText = Buffer.from(textParts.join(':'), 'hex');
     let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(ENCRYPTION_KEY), iv);

@@ -80,14 +80,6 @@ const userDataSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    
-    createdDate: {
-        type: Date,
-        required: true
-    },
-    updatedDate: {
-        type: Date
-    },
     tlushusercode: {
         type: String,
         required: true
@@ -95,6 +87,19 @@ const userDataSchema = new mongoose.Schema({
     tlushpassword: {
         type: String,
         required: true
+    },
+    createdDate: {
+        type: Date,
+        required: true
+    },
+    updatedDate: {
+        type: Date
+    },
+    gettlushDate: {
+        type: Date
+    },
+    processtlushDate: {
+        type: Date
     }
 },{collection: 'userdatas'});
 

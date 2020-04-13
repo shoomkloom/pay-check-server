@@ -1,4 +1,5 @@
 {
     "name": "Pay-Check Server - Development",
-    "connection-string": "mongodb://localhost/pay-check-server"
+    "connection-string": "mongodb+srv://newbuz:mangomouse930@cluster0-8zbtw.gcp.mongodb.net/pay-check?retryWrites=true&w=majority", 
+    "connection-string_": "mongodb://localhost/pay-check-server"
 }

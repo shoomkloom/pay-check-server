@@ -1,6 +1,6 @@
 {
     "name": "Pay-Check Server",
     "mongodb": {
-        "dbName": "pay-check-server-mongodb_documents_azure_com"
+        "dbName": "pay-check-mongodb"
     }
 }
