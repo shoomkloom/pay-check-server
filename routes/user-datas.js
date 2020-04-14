@@ -21,9 +21,27 @@ router.get('/:userid', auth, async function (req, res) {
     //Find requested user data
     let userData = await UserData.findOne({ userid: req.body.userid });
     if(!userData){
-        logger.error(`Could not find a user data with id=${req.params.id} - ` + ex);
+        logger.error(`Could not find a user data with id=${req.params.id}`);
         return res.status(404).send(`Could not find a user data with id=${req.params.id}`);
     }
+    
+    //Send the requested user data
+    res.send(userData);
+});
+
+router.get('/:userid/cleartlushcred', auth, async function (req, res) {
+    logger.debug(`GET /${req.params.userid}/cleartlushcred - Invoked`);
+    
+    //Find requested user data
+    let userData = await UserData.findOne({ userid: req.params.userid });
+    if(!userData){
+        logger.error(`Could not find a user data with id=${req.params.id}`);
+        return res.status(404).send(`Could not find a user data with id=${req.params.id}`);
+    }
+
+    userData.tlushpassword = null;
+    userData.save();
+    logger.info(`tlushpassword cleared for user data userid=${userData.userid}`);
     
     //Send the requested user data
     res.send(userData);
@@ -45,7 +63,7 @@ router.get('/:year/:month', auth, async function (req, res) {
                 logger.info(`userData.userid=${userData.userid}, userData.gettlushDate=null`);
             }
             if(!userData.gettlushDate || 
-                Math.abs(nowDate.getTime() - userData.gettlushDate.getTime())/(1000 * 60) > 60){
+                Math.abs(nowDate.getTime() - userData.gettlushDate.getTime())/(1000 * 60) > 1/*@@60*/){
                 //For each user data try to find a usertlushdata object
                 //for this month
                 let foundUserTlushData = await UserTlushData.findOne({'userid': userData.userid, 'periodyear':req.params.year, 'periodmonth':req.params.month}).exec();

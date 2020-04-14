@@ -85,8 +85,7 @@ const userDataSchema = new mongoose.Schema({
         required: true
     },
     tlushpassword: {
-        type: String,
-        required: true
+        type: String
     },
     createdDate: {
         type: Date,
