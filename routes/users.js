@@ -24,7 +24,7 @@ router.get('/:id', auth, async function (req, res) {
     }
     
     //Get the requested user
-    res.send(_.pick(user, ['_id', 'name', 'email', 'password', 'phone', 'fullyregestered']));
+    res.send(_.pick(user, ['_id', 'name', 'email', 'phone', 'fullyregestered']));
 });
 
 router.post('/', async function (req, res) {
@@ -54,7 +54,7 @@ router.post('/', async function (req, res) {
     await user.save();
 
     const token = user.generateAuthToken();
-    res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email', 'password', 'phone', 'fullyregestered']));
+    res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email', 'phone', 'fullyregestered']));
 });
 
 router.put('/:id', auth, async function (req, res) {
@@ -79,7 +79,7 @@ router.put('/:id', auth, async function (req, res) {
     await user.save();
 
     //Send the updated user data
-    res.send(_.pick(user, ['_id', 'name', 'email', 'password', 'phone', 'fullyregestered']));
+    res.send(_.pick(user, ['_id', 'name', 'email', 'phone', 'fullyregestered']));
 });
 
 module.exports = router;
