@@ -40,6 +40,18 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         required: true
     },
+    tlushusercode: {
+        type: String
+    },
+    tlushpassword: {
+        type: String
+    },
+    gettlushDate: {
+        type: Date
+    },
+    processtlushDate: {
+        type: Date
+    },
     createdDate: {
         type: Date,
         required: true
@@ -63,7 +75,9 @@ function validateUser(user){
         email: Joi.string().min(5).max(255).email().required(),
         password: Joi.string().min(5).max(1024).required(),
         fullyregestered: Joi.boolean().required(),
-        phone: Joi.string().min(5).max(20)
+        phone: Joi.string().min(5).max(20),
+        tlushusercode: Joi.string(),
+        tlushpassword: Joi.string()
     }
     return Joi.validate(user, userSchema);
 };
@@ -75,7 +89,13 @@ function validateUserUpdate(user){
         email: Joi.string().min(5).max(255).email(),
         password: Joi.string().min(5).max(1024),
         phone: Joi.string().min(5).max(20),
-        fullyregestered: Joi.boolean()
+        fullyregestered: Joi.boolean(),
+        tlushusercode: Joi.string(),
+        tlushpassword: Joi.string(),
+        gettlushDate: Joi.date(),
+        processtlushDate: Joi.date(),
+        createdDate: Joi.date(),
+        updatedDate: Joi.date()
     }
     return Joi.validate(user, userSchema);
 };

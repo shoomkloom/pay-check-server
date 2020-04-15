@@ -37,7 +37,7 @@ const userDataSchema = new mongoose.Schema({
         required: true
     },
     vetekformalystart: {
-        type: String,
+        type: Number,
         required: true
     },
     veteknotformaly: {
@@ -80,24 +80,11 @@ const userDataSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    tlushusercode: {
-        type: String,
-        required: true
-    },
-    tlushpassword: {
-        type: String
-    },
     createdDate: {
         type: Date,
         required: true
     },
     updatedDate: {
-        type: Date
-    },
-    gettlushDate: {
-        type: Date
-    },
-    processtlushDate: {
         type: Date
     }
 },{collection: 'userdatas'});
@@ -115,7 +102,7 @@ function validateUserData(userData){
         gmuleihishtalmut: Joi.string().required(),
         ofekhadash: Joi.boolean().required(),
         vetekformaly: Joi.number().required(),
-        vetekformalystart: Joi.string().required(),
+        vetekformalystart: Joi.number().required(),
         veteknotformaly: Joi.number().required(),
         vetekzahalpolice: Joi.number().required(),
         sadirmonths: Joi.number().required(),
@@ -125,9 +112,7 @@ function validateUserData(userData){
         policehoraa: Joi.boolean().required(),
         madrichshelach: Joi.boolean().required(),
         vetekprofessional: Joi.number().required(),
-        vetekminhalit: Joi.number().required(),
-        tlushusercode: Joi.string().required(),
-        tlushpassword: Joi.string().required()
+        vetekminhalit: Joi.number().required()
     }
     return Joi.validate(userData, userDataSchema);
 };

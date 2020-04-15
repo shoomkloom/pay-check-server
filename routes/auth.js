@@ -1,7 +1,6 @@
 const {User} = require('../models/user');
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
 const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 const Joi = require('joi');
@@ -22,7 +21,7 @@ router.post('/', async function (req, res) {
     if(!validPassword) return res.status(400).send('Invalid email or password');
 
     const token = user.generateAuthToken();
-    res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email', 'phone', 'fullyregestered']));
+    res.header('x-auth-token', token).send(_.omit(user.toObject(), ['password', '__v']));
 });
 
 //Utilities

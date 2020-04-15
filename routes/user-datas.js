@@ -1,7 +1,6 @@
 const auth = require('../middleware/auth');
 const {UserData, validateUserData} = require('../models/user-data');
-const {UserTlushData} = require('../models/user-tlush-data');
-const {encrypt, decrypt} = require('../models/helpers');
+const {User} = require('../models/user');
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
@@ -29,66 +28,6 @@ router.get('/:userid', auth, async function (req, res) {
     res.send(userData);
 });
 
-router.get('/:userid/cleartlushcred', auth, async function (req, res) {
-    logger.debug(`GET /${req.params.userid}/cleartlushcred - Invoked`);
-    
-    //Find requested user data
-    let userData = await UserData.findOne({ userid: req.params.userid });
-    if(!userData){
-        logger.error(`Could not find a user data with id=${req.params.id}`);
-        return res.status(404).send(`Could not find a user data with id=${req.params.id}`);
-    }
-
-    userData.tlushpassword = null;
-    userData.save();
-    logger.info(`tlushpassword cleared for user data userid=${userData.userid}`);
-    
-    //Send the requested user data
-    res.send(userData);
-});
-
-router.get('/:year/:month', auth, async function (req, res) {
-    logger.debug(`GET /${req.params.year}/${req.params.month} - Invoked`);
-
-    try{
-        //Find list of user datas that don't have usertlushdata for this period
-        let userDatas = await UserData.find({"tlushpassword" : { $ne : null }});
-        for (let userData of userDatas){
-            //If this gettlushDate is less than hour, skip to the next one
-            let nowDate = new Date();
-            if(userData.gettlushDate){
-                logger.info(`userData.userid=${userData.userid}, min diff=${Math.abs(nowDate.getTime() - userData.gettlushDate.getTime())/(1000 * 60)}`);
-            }
-            else{
-                logger.info(`userData.userid=${userData.userid}, userData.gettlushDate=null`);
-            }
-            if(!userData.gettlushDate || 
-                Math.abs(nowDate.getTime() - userData.gettlushDate.getTime())/(1000 * 60) > 1/*@@60*/){
-                //For each user data try to find a usertlushdata object
-                //for this month
-                let foundUserTlushData = await UserTlushData.findOne({'userid': userData.userid, 'periodyear':req.params.year, 'periodmonth':req.params.month}).exec();
-                if(!foundUserTlushData){
-                    //Send the first user data object we find that does not have a
-                    //usertlushdata for the requested month
-                    userData.gettlushDate = nowDate;
-                    await userData.save();
-
-                    userData.tlushpassword = decrypt(userData.tlushpassword);
-                    logger.info(`userData.userid=${userData.userid}, calling res.send`);
-                    return res.send(userData);
-                }
-            }
-        }
-    }
-    catch(ex){
-        let error = `Could not get list of user data objects for year=${req.params.year}, month=${req.params.month}`;
-        logger.error(`${error} Exception=${ex}`);
-        return res.status(500).send(error);
-    }
-    logger.info('Calling res.send({})');
-    return res.send({});
-});
-
 router.post('/', async function (req, res) {
     logger.debug('POST / - Invoked');
 
@@ -105,21 +44,26 @@ router.post('/', async function (req, res) {
         return res.status(400).send('User Data already exists');
     }
 
+    let relatedUser = await User.findOne({ _id: req.body.userid });
+    if(!relatedUser){
+        logger.error(`Could not find a user with id=${req.body.userid}`);
+        return res.status(404).send(`Could not find a user with id=${req.body.userid}`);
+    }
+
     //Create a new user data object and add to db
     userData = new UserData();
 
     var keys = Object.keys(req.body);
     for(var i = 0, length = keys.length; i < length; i++) {
-        if(keys[i] != 'tlushpassword'){
-            userData[keys[i]] = req.body[keys[i]];
-        }
+        userData[keys[i]] = req.body[keys[i]];
     }
-
-    //Save encrypted tlush password
-    userData.tlushpassword = encrypt(req.body['tlushpassword']);
 
     userData.createdDate = new Date();
     await userData.save();
+
+    relatedUser.fullyregestered = true;
+    relatedUser.updatedDate = new Date();
+    await relatedUser.save();
 
     //Send the created user data
     res.send(userData);
@@ -144,14 +88,7 @@ router.put('/:userid', auth, async function (req, res) {
     //Update requested userData
     var keys = Object.keys(req.body);
     for(var i = 0, length = keys.length; i < length; i++) {
-        if(keys[i] != 'tlushpassword'){
-            userData[keys[i]] = req.body[keys[i]];
-        }
-    }
-
-    //Save encrypted tlush password if exists
-    if(req.body['tlushpassword']){
-        userData.tlushpassword = encrypt(req.body['tlushpassword']);
+        userData[keys[i]] = req.body[keys[i]];
     }
 
     userData.updatedDate = new Date();
