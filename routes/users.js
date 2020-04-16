@@ -1,5 +1,6 @@
 const auth = require('../middleware/auth');
 const {User, validateUser, validateUserUpdate} = require('../models/user');
+const {UserTlushData} = require('../models/user-tlush-data');
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
@@ -132,7 +133,7 @@ router.get('/:year/:month', auth, async function (req, res) {
                 Math.abs(nowDate.getTime() - user.gettlushDate.getTime())/(1000 * 60) > 1/*@@60*/){
                 //For each user try to find a usertlushdata object
                 //for this month
-                let foundUserTlushData = await UserTlushData.findOne({'userid': userData.userid, 'periodyear':req.params.year, 'periodmonth':req.params.month}).exec();
+                let foundUserTlushData = await UserTlushData.findOne({'userid': user._id, 'periodyear':req.params.year, 'periodmonth':req.params.month}).exec();
                 if(!foundUserTlushData){
                     //Send the first user object we find that does not have a
                     //usertlushdata for the requested month
@@ -141,13 +142,13 @@ router.get('/:year/:month', auth, async function (req, res) {
 
                     user.tlushpassword = decrypt(user.tlushpassword);
                     logger.info(`user._id=${user._id}, calling res.send`);
-                    res.send(_.omit(user.toObject(), ['password', '__v']));
+                    return res.send(_.omit(user.toObject(), ['password', '__v']));
                 }
             }
         }
     }
     catch(ex){
-        let error = `Could not get list of user data objects for year=${req.params.year}, month=${req.params.month}`;
+        let error = `Could not get list of user objects for year=${req.params.year}, month=${req.params.month}`;
         logger.error(`${error} Exception=${ex}`);
         return res.status(500).send(error);
     }
