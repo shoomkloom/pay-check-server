@@ -1,8 +1,6 @@
 {
     "name": "pay-check-server",
     "jwtPrivateKey": "",
-    "mongodb": {
-        "connection-string": ""
-    },
+    "connection-string": "",
     "cryptopass": ""
 }

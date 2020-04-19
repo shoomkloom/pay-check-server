@@ -1,6 +1,3 @@
 {
-    "name": "Pay-Check Server",
-    "mongodb": {
-        "dbName": "pay-check-mongodb"
-    }
+    "name": "Pay-Check Server"
 }

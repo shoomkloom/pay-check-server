@@ -8,7 +8,7 @@
     "start": "node index.js"
   },
   "engines": {
-    "node": "8.11.4"
+    "node": "12.13.0"
   },
   "keywords": [],
   "author": "",

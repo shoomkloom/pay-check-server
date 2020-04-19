@@ -33,7 +33,7 @@ module.exports = function(){
                 console: { type: 'console' },
                 azureLogs: {
                     type: 'log4js-azure-append-blob-appender',
-                    azureStorageConnectionString: 'DefaultEndpointsProtocol=https;AccountName=pay-check-server-teststorage;AccountKey=uWrplvbkdwqCY68rcnBDRMA4mNWs7wfA9Zf7RRoyoMyCXDxDyUDt0uDppv/EETXnJ4lk/sXtoYXXDjnBjY8mQA==;EndpointSuffix=core.windows.net',
+                    azureStorageConnectionString: 'DefaultEndpointsProtocol=https;AccountName=paycheckdiag;AccountKey=kKgjINJnV/Sl6lRCaH2s7aQcIULN/3yZd7AL4MELq/Sn4mXX87oi1hw+4Cc03TPL9VIhxGzZO1djC1EQphQfGg==;EndpointSuffix=core.windows.net',
                     container: 'applogs',
                     appendBlob: 'pay-check-server.log',
                     pattern: '%d [%t] %p %logger [%x] - %m'

@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/ea952ffd-8ccf-4df3-8c97-9dc0d8116a2f/resourceGroups/pay-check/providers/Microsoft.Web/sites/pay-check-server",
+    "appService.deploySubpath": ""
+}

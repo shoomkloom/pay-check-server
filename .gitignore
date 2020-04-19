@@ -3,3 +3,4 @@ node_modules/
 logfile.log
 *.zip
 log/
+setenv.bat
