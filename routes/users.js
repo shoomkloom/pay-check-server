@@ -13,7 +13,7 @@ router.get('/', auth, async function (req, res) {
     logger.debug('GET / - Invoked');
     //Get the list of users
     const users = await User.find().sort('name');
-    res.send(_.map(users, _.partialRight(_.omit(user.toObject(), ['password', '__v']))));
+    res.send(_.map(users, _.partialRight(user => _.omit(user.toObject(), ['password', '__v']))));
 });
 
 router.get('/:id', auth, async function (req, res) {
