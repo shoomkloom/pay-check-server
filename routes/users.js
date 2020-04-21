@@ -123,12 +123,6 @@ router.get('/:year/:month', auth, async function (req, res) {
         for (let user of users){
             //If this gettlushDate is less than hour, skip to the next one
             let nowDate = new Date();
-            if(user.gettlushDate){
-                logger.info(`user._id=${user._id}, min diff=${Math.abs(nowDate.getTime() - user.gettlushDate.getTime())/(1000 * 60)}`);
-            }
-            else{
-                logger.info(`user._id=${user._id}, user.gettlushDate=null`);
-            }
             if(!user.gettlushDate || 
                 Math.abs(nowDate.getTime() - user.gettlushDate.getTime())/(1000 * 60) > 1/*@@60*/){
                 //For each user try to find a usertlushdata object
@@ -141,7 +135,6 @@ router.get('/:year/:month', auth, async function (req, res) {
                     await user.save();
 
                     user.tlushpassword = decrypt(user.tlushpassword);
-                    logger.info(`user._id=${user._id}, calling res.send`);
                     return res.send(_.omit(user.toObject(), ['password', '__v']));
                 }
             }
@@ -152,7 +145,6 @@ router.get('/:year/:month', auth, async function (req, res) {
         logger.error(`${error} Exception=${ex}`);
         return res.status(500).send(error);
     }
-    logger.info('Calling res.send({})');
     return res.send({});
 });
 
