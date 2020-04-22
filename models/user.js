@@ -36,6 +36,9 @@ const userSchema = new mongoose.Schema({
     imageUrl: {
         type: String
     },
+    token: {
+        type: String
+    },
     fullyregestered: {
         type: Boolean,
         required: true
