@@ -6,7 +6,7 @@ const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
 const log4js = require('log4js');
-const logger = log4js.getLogger('users');
+const logger = log4js.getLogger('user-tlush-datas');
 
 router.get('/', auth, async function (req, res) {
     logger.debug('GET / - Invoked');
