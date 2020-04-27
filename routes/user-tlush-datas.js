@@ -53,12 +53,14 @@ router.get('/:userid/:year/:month', auth, async function (req, res) {
 router.post('/', async function (req, res) {
     logger.debug('POST / - Invoked');
 
+/*@@    
     //Validate requested details
     const result = validateUserTlushData(req.body);
     if(result.error){
         logger.error(`ERROR - ${result.error}`);
         return res.status(400).send(result.error.message);
     }
+@@*/
 
     let userTlushData = await UserTlushData.findOne({ userid: req.body.userid });
     if(userTlushData){
