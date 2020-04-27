@@ -69,8 +69,9 @@ router.post('/', async function (req, res) {
     });
     
     if(userTlushData){
-        logger.error('ERROR - User Tlush Data already exists');
-        return res.status(400).send('User Tlush Data already exists');
+        let error = `ERROR - User Tlush Data already exists for ${req.body.userid}/${req.body.periodyear}/${req.body.periodmonth}`;
+        logger.error(error);
+        return res.status(400).send(error);
     }
 
     //Create a new user tlush data object and add to db
