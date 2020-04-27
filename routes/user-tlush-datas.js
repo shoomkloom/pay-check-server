@@ -62,7 +62,12 @@ router.post('/', async function (req, res) {
     }
 @@*/
 
-    let userTlushData = await UserTlushData.findOne({ userid: req.body.userid });
+    let userTlushData = await UserTlushData.findOne({ 
+        userid: req.body.userid, 
+        periodyear: req.body.periodyear, 
+        periodmonth: req.body.periodmonth 
+    });
+    
     if(userTlushData){
         logger.error('ERROR - User Tlush Data already exists');
         return res.status(400).send('User Tlush Data already exists');
