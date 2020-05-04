@@ -24,6 +24,11 @@ const userDataSchema = new mongoose.Schema({
         type: Boolean,
         required: true
     },
+    rishyonhoraa: {
+        type: Boolean,
+        required: true
+    },
+    //@@ Do we need all these?
     gmuleihishtalmut: {
         type: String,
         required: true
@@ -99,6 +104,7 @@ function validateUserData(userData){
         hachshara: Joi.string().required(),
         vetekyears: Joi.number().required(),
         teudathoraa: Joi.boolean().required(),
+        rishyonhoraa: Joi.boolean().required(),
         gmuleihishtalmut: Joi.string().required(),
         ofekhadash: Joi.boolean().required(),
         vetekformaly: Joi.number().required(),
