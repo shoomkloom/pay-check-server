@@ -1,7 +1,6 @@
 const auth = require('../middleware/auth');
-const {UserData} = require('../models/user-data');
+const {User} = require('../models/user');
 const {UserTlushData, validateUserTlushData} = require('../models/user-tlush-data');
-const {encrypt, decrypt} = require('../models/helpers');
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
@@ -30,12 +29,12 @@ router.get('/:userid', auth, async function (req, res) {
 });
 
 router.get('/:userid/:year/:month', auth, async function (req, res) {
-    logger.debug(`GET /${req.params.year}/${req.params.month} - Invoked`);
+    logger.debug(`GET /${req.params.userid}/${req.params.year}/${req.params.month} - Invoked`);
 
     try{
-        const userTlushData = await UserTlushData.find({'userid': userData.userid, 'periodyear':req.params.year, 'periodmonth':req.params.month});
+        const userTlushData = await UserTlushData.find({'userid': req.params.userid, 'periodyear':req.params.year, 'periodmonth':req.params.month});
         if(!userTlushData){
-            const error = `Could not find a user tlush data with id=${req.params.id}, periodyear=${req.params.year}, periodmonth=${req.params.month}`;
+            const error = `Could not find a user tlush data with id=${req.params.userid}, periodyear=${req.params.year}, periodmonth=${req.params.month}`;
             logger.error(error + ` - ${ex}`);
             return res.status(404).send(error);
         }
@@ -44,7 +43,7 @@ router.get('/:userid/:year/:month', auth, async function (req, res) {
         res.send(userTlushDatas);
     }
     catch(ex){
-        const error = `Could not find a user tlush data with id=${req.params.id}, periodyear=${req.params.year}, periodmonth=${req.params.month}`;
+        const error = `Could not find a user tlush data with id=${req.params.userid}, periodyear=${req.params.year}, periodmonth=${req.params.month}`;
         logger.error(`${error} Exception=${ex}`);
         return res.status(500).send(error);
     }
@@ -74,7 +73,7 @@ router.post('/', async function (req, res) {
         return res.status(400).send(error);
     }
 
-    //Create a new user tlush data object and add to db
+    //Create a new usertlushdata object and add to db
     let newUserTlushData = new UserTlushData();
 
     var keys = Object.keys(req.body);
@@ -82,17 +81,17 @@ router.post('/', async function (req, res) {
         newUserTlushData[keys[i]] = req.body[keys[i]];
     }
 
-    //Find related user data
-    let userData = await UserData.findOne({ userid: req.body.userid });
-    if(!userData){
-        logger.error(`Could not find related user data with id=${req.params.id}`);
-        return res.status(404).send(`Could not find related user data with id=${req.params.id}`);
+    //Find related user
+    let user = await User.findOne({ _id: req.body.userid });
+    if(!user){
+        logger.error(`Could not find related user with id=${req.body.userid}`);
+        return res.status(404).send(`Could not find related user with id=${req.body.userid}`);
     }
 
     //Update user data object
-    userData.gettlushDate = null;
-    userData.updatedDate = new Date();
-    userData.save();
+    user.gettlushDate = null;
+    user.updatedDate = new Date();
+    user.save();
 
     //Save user tlush data object
     newUserTlushData.createdDate = new Date();
@@ -101,36 +100,5 @@ router.post('/', async function (req, res) {
     //Send the created user tlush data
     res.send(newUserTlushData);
 });
-
-/*@@
-router.put('/:userid', auth, async function (req, res) {
-    logger.debug(`PUT /${req.params.userid} - Invoked`);
-
-    //Validate requested details
-    const result = validateUserTlushData(req.body);
-    if(result.error){
-        logger.error(`ERROR - ${result.error.message}`);
-        return res.status(400).send(result.error.message);
-    }
-
-    let userTlushData = await UserTlushData.findOne({ userid: req.params.userid });
-    if(!userTlushData){
-        logger.error('ERROR - User Data does not exist');
-        return res.status(400).send('User Data does not exist');
-    }
-
-    //Update requested userData
-    var keys = Object.keys(req.body);
-    for(var i = 0, length = keys.length; i < length; i++) {
-        userTlushData[keys[i]] = req.body[keys[i]];
-    }
-
-    userTlushData.updatedDate = new Date();
-    await userTlushData.save();
-
-    //Send the updated user data
-    res.send(userTlushData);
-});
-@@*/
 
 module.exports = router;

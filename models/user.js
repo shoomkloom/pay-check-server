@@ -52,9 +52,6 @@ const userSchema = new mongoose.Schema({
     gettlushDate: {
         type: Date
     },
-    processtlushDate: {
-        type: Date
-    },
     createdDate: {
         type: Date,
         required: true

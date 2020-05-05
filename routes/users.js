@@ -124,7 +124,7 @@ router.get('/usertlushdata/:year/:month', auth, async function (req, res) {
             //If this gettlushDate is less than hour, skip to the next one
             let nowDate = new Date();
             if(!user.gettlushDate || 
-                Math.abs(nowDate.getTime() - user.gettlushDate.getTime())/(1000 * 60) > 1/*@@60*/){
+                Math.abs(nowDate.getTime() - user.gettlushDate.getTime())/(1000 * 60) > 60){
                 //For each user try to find a usertlushdata object
                 //for this month
                 let foundUserTlushData = await UserTlushData.findOne({'userid': user._id, 'periodyear':req.params.year, 'periodmonth':req.params.month}).exec();

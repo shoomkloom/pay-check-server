@@ -29,6 +29,9 @@ const userTlushDataSchema = new mongoose.Schema({
     updatedDate: {
         type: Date
     },
+    processtlushDate: {
+        type: Date
+    },
     basics: {
 		salaryPeriod: {
             type: String
