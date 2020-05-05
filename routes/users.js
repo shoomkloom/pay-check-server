@@ -114,8 +114,8 @@ router.get('/:id/cleartlushcred', auth, async function (req, res) {
     res.send(_.omit(user.toObject(), ['password', '__v']));
 });
 
-router.get('/:year/:month', auth, async function (req, res) {
-    logger.debug(`GET /${req.params.year}/${req.params.month} - Invoked`);
+router.get('/usertlushdata/:year/:month', auth, async function (req, res) {
+    logger.debug(`GET /usertlushdata/${req.params.year}/${req.params.month} - Invoked`);
 
     try{
         //Find list of users that don't have usertlushdata for this period
