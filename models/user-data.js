@@ -28,57 +28,8 @@ const userDataSchema = new mongoose.Schema({
         type: Boolean,
         required: true
     },
-    //@@ Do we need all these?
     ofekhadash: {
         type: Boolean,
-        required: true
-    },
-    vetekformaly: {
-        type: Number,
-        required: true
-    },
-    vetekformalystart: {
-        type: Number,
-        required: true
-    },
-    veteknotformaly: {
-        type: Number,
-        required: true
-    },
-    vetekzahalpolice: {
-        type: Number,
-        required: true
-    },
-    sadirmonths: {
-        type: Number,
-        required: true
-    },
-    zahalkevayears: {
-        type: Number,
-        required: true
-    },
-    policesherutyears: {
-        type: Number,
-        required: true
-    },
-    zahalhoraa: {
-        type: Boolean,
-        required: true
-    },
-    policehoraa: {
-        type: Boolean,
-        required: true
-    },
-    madrichshelach: {
-        type: Boolean,
-        required: true
-    },
-    vetekprofessional: {
-        type: Number,
-        required: true
-    },
-    vetekminhalit: {
-        type: Number,
         required: true
     },
     createdDate: {
@@ -101,19 +52,7 @@ function validateUserData(userData){
         vetekyears: Joi.number().required(),
         teudathoraa: Joi.boolean().required(),
         rishyonhoraa: Joi.boolean().required(),
-        ofekhadash: Joi.boolean().required(),
-        vetekformaly: Joi.number().required(),
-        vetekformalystart: Joi.number().required(),
-        veteknotformaly: Joi.number().required(),
-        vetekzahalpolice: Joi.number().required(),
-        sadirmonths: Joi.number().required(),
-        zahalkevayears: Joi.number().required(),
-        policesherutyears: Joi.number().required(),
-        zahalhoraa: Joi.boolean().required(),
-        policehoraa: Joi.boolean().required(),
-        madrichshelach: Joi.boolean().required(),
-        vetekprofessional: Joi.number().required(),
-        vetekminhalit: Joi.number().required()
+        ofekhadash: Joi.boolean().required()
     }
     return Joi.validate(userData, userDataSchema);
 };
