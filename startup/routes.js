@@ -2,6 +2,7 @@ const express = require('express');
 const users = require('../routes/users');
 const userDatas = require('../routes/user-datas');
 const userTlushDatas = require('../routes/user-tlush-datas');
+const userTlushResults = require('../routes/user-tlush-results');
 const auth = require('../routes/auth');
 const error = require('../middleware/error');
 
@@ -12,6 +13,7 @@ module.exports = function(app) {
     app.use('/api/users', users);
     app.use('/api/user-datas', userDatas);
     app.use('/api/user-tlush-datas', userTlushDatas);
+    app.use('/api/user-tlush-results', userTlushResults);
     app.use('/api/auth', auth);
 
     //Must be last!

@@ -1,6 +1,7 @@
 const auth = require('../middleware/auth');
 const {User} = require('../models/user');
 const {UserTlushData} = require('../models/user-tlush-data');
+const {UserTlushResult} = require('../models/user-tlush-result');
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
@@ -12,6 +13,36 @@ router.get('/', auth, async function (req, res) {
     //Get the list of user-tlush-datas
     const userTlushDatas = await UserTlushData.find();
     res.send(userTlushDatas);
+});
+
+router.get('/usertlushresult', auth, async function (req, res) {
+    logger.debug(`GET /usertlushresult - Invoked`);
+
+    try{
+        //Find list of usertlushdatas that don't have usertlushresult
+        let userTlushDatas = await UserTlushData.find();
+        let nowDateTime = new Date().getTime();
+        for (let userTlushData of userTlushDatas){
+            //If this processtlushDate is less than hour, skip to the next one
+            if(!userTlushData.processtlushDate || 
+                Math.abs(nowDateTime - userTlushData.processtlushDate.getTime())/(1000 * 60) > 60){
+                //For each usertlushdata try to find a usertlushresult object
+                let foundUserTlushResult = await UserTlushResult.findOne({usertlushdataid: userTlushData._id});
+                if(!foundUserTlushResult){
+                    //Send the first usertlushdata object we find that does not have a usertlushresult
+                    userTlushData.processtlushDate = nowDateTime;
+                    await userTlushData.save();
+                    return res.send(_.omit(userTlushData.toObject(), ['fronthtml', 'backhtml', '__v']));
+                }
+            }
+        }
+    }
+    catch(ex){
+        let error = 'Could not get usertlushdata object';
+        logger.error(`${error} Exception=${ex}`);
+        return res.status(500).send(error);
+    }
+    return res.send({});
 });
 
 router.get('/:userid', auth, async function (req, res) {
@@ -47,37 +78,6 @@ router.get('/:userid/:year/:month', auth, async function (req, res) {
         logger.error(`${error} Exception=${ex}`);
         return res.status(500).send(error);
     }
-});
-
-router.get('/usertlushresult', auth, async function (req, res) {
-    logger.debug(`GET /usertlushresult - Invoked`);
-
-    try{
-        //Find list of usertlushdatas that don't have usertlushresult
-        let userTlushDatas = await UserTlushData.find();
-        for (let userTlushData of userTlushDatas){
-            //If this processtlushDate is less than hour, skip to the next one
-            let nowDate = new Date();
-            if(!userTlushData.processtlushDate || 
-                Math.abs(nowDate.getTime() - userTlushData.processtlushDate.getTime())/(1000 * 60) > 60){
-                //For each usertlushdata try to find a usertlushresult object
-                let foundUserTlushResult = await UserTlushResult.findOne({'usertlushdataid': userTlushData._id}).exec();
-                if(!foundUserTlushResult){
-                    //Send the first usertlushdata object we find that does not have a usertlushresult
-                    userTlushData.processtlushDate = nowDate;
-                    await userTlushData.save();
-
-                    return res.send(_.omit(userTlushData.toObject(), ['fronthtml', 'backhtml', '__v']));
-                }
-            }
-        }
-    }
-    catch(ex){
-        let error = 'Could not get list of usertlushdata objects';
-        logger.error(`${error} Exception=${ex}`);
-        return res.status(500).send(error);
-    }
-    return res.send({});
 });
 
 router.post('/', async function (req, res) {

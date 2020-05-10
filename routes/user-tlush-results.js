@@ -1,6 +1,6 @@
 const auth = require('../middleware/auth');
 const {UserTlushData} = require('../models/user-tlush-data');
-const {UserTlushResult, validateUserTlushResult} = require('../models/user-tlush-data');
+const {UserTlushResult, validateUserTlushResult} = require('../models/user-tlush-result');
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
