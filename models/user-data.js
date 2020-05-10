@@ -12,7 +12,7 @@ const userDataSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    hachshara: {
+    darga: {
         type: String,
         required: true
     },
@@ -48,7 +48,7 @@ function validateUserData(userData){
     const userDataSchema = {
         userid: Joi.string().required(),
         ahuzeimisra: Joi.number().required(),
-        hachshara: Joi.string().required(),
+        darga: Joi.string().required(),
         vetekyears: Joi.number().required(),
         teudathoraa: Joi.boolean().required(),
         rishyonhoraa: Joi.boolean().required(),
