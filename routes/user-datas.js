@@ -18,7 +18,7 @@ router.get('/:userid', auth, async function (req, res) {
     logger.debug(`GET /${req.params.userid} - Invoked`);
     
     //Find requested user data
-    let userData = await UserData.findOne({ userid: req.body.userid });
+    let userData = await UserData.findOne({ userid: req.params.userid });
     if(!userData){
         logger.error(`Could not find a user data with id=${req.params.id}`);
         return res.status(404).send(`Could not find a user data with id=${req.params.id}`);
