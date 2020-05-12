@@ -80,7 +80,7 @@ router.get('/:userid/:year/:month', auth, async function (req, res) {
     }
 });
 
-router.post('/', async function (req, res) {
+router.post('/', auth, async function (req, res) {
     logger.debug('POST / - Invoked');
 
 /*@@    

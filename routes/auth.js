@@ -1,4 +1,4 @@
-const {User} = require('../models/user');
+const {User, validateUserAuth} = require('../models/user');
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
@@ -11,7 +11,7 @@ router.post('/', async function (req, res) {
     logger.debug('POST / - Invoked');
 
     //Validate requested  details
-    const result = validateUser(req.body);
+    const result = validateUserAuth(req.body);
     if(result.error){
         logger.error(`Validation error for ${req.body}: ${result}`);
         return res.status(400).send(result.error.message);
@@ -32,16 +32,5 @@ router.post('/', async function (req, res) {
     user.token = user.generateAuthToken();
     res.send(_.omit(user.toObject(), ['password', '__v']));
 });
-
-//Utilities
-function validateUser(req){
-    logger.debug('validateUser(.) - Invoked');
-
-    const schema = {
-        email: Joi.string().min(5).max(255).email().required(),
-        password: Joi.string().min(5).max(255).required()
-    }
-    return Joi.validate(req, schema);
-};
 
 module.exports = router;

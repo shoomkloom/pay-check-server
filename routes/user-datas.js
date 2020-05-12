@@ -28,7 +28,7 @@ router.get('/:userid', auth, async function (req, res) {
     res.send(userData);
 });
 
-router.post('/', async function (req, res) {
+router.post('/', auth, async function (req, res) {
     logger.debug('POST / - Invoked');
 
     //Validate requested details

@@ -42,7 +42,7 @@ router.get('/:usertlushdataid', auth, async function (req, res) {
     res.send(userTlushResults);
 });
 
-router.post('/', async function (req, res) {
+router.post('/', auth, async function (req, res) {
     logger.debug('POST / - Invoked');
 
     //Validate requested details

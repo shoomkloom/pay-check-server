@@ -82,6 +82,14 @@ function validateUser(user){
     return Joi.validate(user, userSchema);
 };
 
+function validateUserAuth(req){
+    const schema = {
+        email: Joi.string().min(5).max(255).email().required(),
+        password: Joi.string().min(5).max(255).required()
+    }
+    return Joi.validate(req, schema);
+};
+
 function validateUserUpdate(user){
     const userSchema = {
         _id: Joi.string(),
@@ -102,5 +110,6 @@ function validateUserUpdate(user){
 
 exports.User = User;
 exports.validateUser = validateUser;
+exports.validateUserAuth = validateUserAuth;
 exports.validateUserUpdate = validateUserUpdate;
 exports.userSchema = userSchema;
