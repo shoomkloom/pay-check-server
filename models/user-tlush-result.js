@@ -13,7 +13,7 @@ const userTlushResultSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    errors:{
+    errorlist:{
         type: Array
     },
     createdDate: {
@@ -33,7 +33,7 @@ function validateUserTlushResult(userTlushResult){
         userid: Joi.string().required(),
         usertlushdataid: Joi.string().required(),
         status: Joi.string().required(),
-        errors: Joi.array()
+        errorlist: Joi.array()
     }
     return Joi.validate(userTlushResult, userTlushResultSchema);
 };
