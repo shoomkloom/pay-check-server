@@ -33,7 +33,7 @@ function validateUserTlushResult(userTlushResult){
         userid: Joi.string().required(),
         usertlushdataid: Joi.string().required(),
         status: Joi.string().required(),
-        errorlist: Joi.array()
+        errorlist: Joi.optional()
     }
     return Joi.validate(userTlushResult, userTlushResultSchema);
 };
