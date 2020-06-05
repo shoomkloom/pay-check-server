@@ -7,8 +7,14 @@ const userTlushResultSchema = new mongoose.Schema({
         required: true
     },
     usertlushdataid:{
+        type: String
+    },
+    status:{
         type: String,
         required: true
+    },
+    errors:{
+        type: Array
     },
     createdDate: {
         type: Date,
@@ -25,7 +31,9 @@ const UserTlushResult = mongoose.model('UserTlushResult', userTlushResultSchema,
 function validateUserTlushResult(userTlushResult){
     const userTlushResultSchema = {
         userid: Joi.string().required(),
-        usertlushdataid: Joi.string().required()
+        usertlushdataid: Joi.string().required(),
+        status: Joi.string().required(),
+        errors: Joi.array()
     }
     return Joi.validate(userTlushResult, userTlushResultSchema);
 };
