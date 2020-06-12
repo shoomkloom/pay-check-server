@@ -23,9 +23,9 @@ router.get('/usertlushresult', auth, async function (req, res) {
         let userTlushDatas = await UserTlushData.find();
         let nowDateTime = new Date().getTime();
         for (let userTlushData of userTlushDatas){
-            //If this processtlushDate is less than hour, skip to the next one
+            //If this processtlushDate is less than 5 minutes, skip to the next one
             if(!userTlushData.processtlushDate || 
-                Math.abs(nowDateTime - userTlushData.processtlushDate.getTime())/(1000 * 60) > 60){
+                Math.abs(nowDateTime - userTlushData.processtlushDate.getTime())/(1000 * 60) > 5){
                 //For each usertlushdata try to find a usertlushresult object
                 let foundUserTlushResult = await UserTlushResult.findOne({usertlushdataid: userTlushData._id});
                 if(!foundUserTlushResult){
